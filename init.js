@@ -5,14 +5,15 @@ var fs = require('fs');
 var cluster = require('cluster');
 var os = require('os');
 
-var Stratum = require('./lib/stratum/index.js')
+var Stratum = require('./lib/stratum/index.js');
 var CliListener = require('./lib/workers/cliListener.js');
 var PoolWorker = require('./lib/workers/poolWorker.js');
 var Website = require('./lib/workers/website.js');
 var logging = require('./lib/modules/logging.js');
 
 var coinFilePath = 'coins/' + config.coin;
-if (!fs.existsSync(coinFilePath)) {
+if (!fs.existsSync(coinFilePath))
+{
     console.log('Master', config.coin, 'could not find file: ' + coinFilePath);
     return;
 }
@@ -23,7 +24,8 @@ var coinProfile = JSON.parse(fs.readFileSync(coinFilePath, {
 
 config.coin = coinProfile;
 
-try {
+try
+{
     var posix = require('posix');
     try {
         posix.setrlimit('nofile', {
@@ -32,7 +34,7 @@ try {
         });
     } catch (e) {
         if (cluster.isMaster)
-            logging('Init','debug', 'POSIX', 'Connection Limit', '(Safe to ignore) Must be ran as root to increase resource limits');
+        { logging('Init','debug', 'POSIX', 'Connection Limit', '(Safe to ignore) Must be ran as root to increase resource limits'); }
     } finally {
         // Find out which user used sudo through the environment variable
         var uid = parseInt(process.env.SUDO_UID);
@@ -42,34 +44,37 @@ try {
             logging('Init', 'debug', 'POSIX', 'Connection Limit', 'Raised to 100K concurrent connections, now running as non-root user: ' + process.getuid());
         }
     }
-} catch (e) {
+} catch (e)
+{
     if (cluster.isMaster)
-        console.log('POSIX Connection Limit (Safe to ignore) POSIX module not installed and resource (connection) limit was not raised');
+    { console.log('POSIX Connection Limit (Safe to ignore) POSIX module not installed and resource (connection) limit was not raised'); }
 }
 
 
-if (cluster.isWorker) {
+if (cluster.isWorker)
+{
     switch (process.env.workerType) {
-        case 'pool':
-            new PoolWorker();
-            break;
-        case 'website':
-            new Website();
-            break;
+    case 'pool':
+        new PoolWorker();
+        break;
+    case 'website':
+        new Website();
+        break;
     }
 
     return;
 }
 
 
-function spawnPoolWorkers() {
+function spawnPoolWorkers()
+{
     var numForks = (function() {
         if (!config.clustering || !config.clustering.enabled)
-            return 1;
+        { return 1; }
         if (config.clustering.forks === 'auto')
-            return os.cpus().length;
+        { return os.cpus().length; }
         if (!config.clustering.forks || isNaN(config.clustering.forks))
-            return 1;
+        { return 1; }
         return config.clustering.forks;
     })();
 
@@ -92,16 +97,16 @@ function spawnPoolWorkers() {
             }, 2000);
         }).on('message', function(msg) {
             switch (msg.type) {
-                case 'banIP':
-                    Object.keys(cluster.workers).forEach(function(id) {
-                        if (cluster.workers[id].type === 'pool') {
-                            cluster.workers[id].send({
-                                type: 'banIP',
-                                ip: msg.ip
-                            });
-                        }
-                    });
-                    break;
+            case 'banIP':
+                Object.keys(cluster.workers).forEach(function(id) {
+                    if (cluster.workers[id].type === 'pool') {
+                        cluster.workers[id].send({
+                            type: 'banIP',
+                            ip: msg.ip
+                        });
+                    }
+                });
+                break;
             }
         });
     }
@@ -117,7 +122,8 @@ function spawnPoolWorkers() {
     }, 250);
 }
 
-function startCliListener() {
+function startCliListener()
+{
     var cliPort = config.cliPort;
 
     var listener = new CliListener(cliPort);
@@ -126,25 +132,28 @@ function startCliListener() {
     }).on('command', function(command, params, options, reply) {
 
         switch (command) {
-            case 'blocknotify':
-                Object.keys(cluster.workers).forEach(function(id) {
-                    cluster.workers[id].send({
-                        type: 'blocknotify',
-                        coin: params[0],
-                        hash: params[1]
-                    });
+        case 'blocknotify':
+            Object.keys(cluster.workers).forEach(function(id) {
+                cluster.workers[id].send({
+                    type: 'blocknotify',
+                    coin: params[0],
+                    hash: params[1]
                 });
-                reply('Workers notified');
-                break;
-            default:
-                reply('unrecognized command "' + command + '"');
-                break;
+            });
+            reply('Workers notified');
+            break;
+        default:
+            reply('unrecognized command "' + command + '"');
+            break;
         }
     }).start();
 }
 
-function startWebsite() {
-    if (!config.website.enabled) return;
+function startWebsite()
+{
+    if (!config.website.enabled) {
+        return;
+    }
 
     var worker = cluster.fork({
         workerType: 'website',
@@ -158,7 +167,8 @@ function startWebsite() {
     });
 }
 
-function createEmptyLogs() {
+function createEmptyLogs()
+{
     try {
         fs.readFileSync('./logs/blocks.json')
     } catch (err) {
@@ -170,7 +180,8 @@ function createEmptyLogs() {
     }
 }
 
-(function init() {
+(function init()
+{
     createEmptyLogs();
     spawnPoolWorkers();
     startCliListener();
