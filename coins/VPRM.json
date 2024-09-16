@@ -1,0 +1,7 @@
+{
+    "name": "Vaporum",
+    "symbol": "VPRM",
+    "algorithm": "equihash",
+    "peerMagic": "c40dc9cb",
+    "txfee": 0.0001
+}
