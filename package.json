@@ -1,49 +1,53 @@
 {
-  "name": "equihash-solomining",
-  "version": "0.0.1",
+  "name": "komodo-solomining",
+  "version": "0.0.2",
   "description": "High performance Stratum poolserver in Node.js",
   "keywords": [
     "stratum",
     "mining",
     "pool",
     "server",
-    "poolserver",
-    "bitcoin",
-    "litecoin",
-    "scrypt"
+    "poolserver"
   ],
-  "homepage": "https://github.com/joshuayabut/node-stratum-pool",
+  "homepage": "https://github.com/TheComputerGenie/komodo-solomining",
   "bugs": {
-    "url": "https://github.com/joshuayabut/node-stratum-pool/issues"
+    "url": "https://github.com/TheComputerGenie/komodo-solomining/issues"
   },
-  "license": "GPL-2.0",
-  "author": "Matthew Little",
+  "license": "GPL-3.0",
+  "author": "ComputerGenie",
   "contributors": [
+    {
+      "name": "webworker01",
+      "url": "https://github.com/webworker01"
+    },
+    {
+      "name": "aayanl",
+      "url": "https://github.com/aayanl/equihash-solomining"
+    },
     "vekexasia",
-    "TheSeven"
+    "TheSeven",
+    {
+      "name": "Matthew Little",
+      "url": "https://github.com/zone117x"
+    }
   ],
-  "main": "lib/index.js",
+  "main": "init.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joshuayabut/node-stratum-pool.git"
+    "url": "https://github.com/TheComputerGenie/komodo-solomining.git"
   },
   "dependencies": {
-    "async": "*",
-    "base58-native": "*",
-    "bignum": "*",
-    "bitcoinjs-lib-zcash": "git+https://github.com/runn1ng/bitcoinjs-lib.git#zcash",
-    "body-parser": "^1.17.1",
-    "color": "^1.0.3",
-    "colors": "^1.1.2",
-    "dot": "^1.1.1",
-    "equihashverify": "git+https://github.com/joshuayabut/equihashverify.git",
-    "express": "^4.15.2",
-    "express-dot-engine": "^1.0.7",
-    "merkle-bitcoin": "git+https://github.com/joshuayabut/merkle-bitcoin.git",
-    "promise": "*"
+    "async": "^3.0.0",
+    "base58-native": "^0.1.4",
+    "bignum": "mtl1979/node-bignum#dccf7b7",
+    "bitgo-utxo-lib": "github:TheComputerGenie/bitgo-utxo-lib.git",
+    "express": "^4.19.2",
+    "express-dot-engine": "1.0.8",
+    "merkle-bitcoin": "^1.0.2",
+    "promise": "^8.0.1"
   },
   "engines": {
-    "node": ">=7"
+    "node": ">=21.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
