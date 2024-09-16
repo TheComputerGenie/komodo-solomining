@@ -1,16 +1,17 @@
-var config = require('./config.json');
+const fs = require('fs');
+const os = require('os');
+const cluster = require('cluster');
 
-var colors = require('colors');
-var fs = require('fs');
-var cluster = require('cluster');
-var os = require('os');
+const Website = require('./lib/workers/website.js');
+const logging = require('./lib/modules/logging.js');
+const PoolWorker = require('./lib/workers/poolWorker.js');
+const CliListener = require('./lib/workers/cliListener.js');
 
-var Stratum = require('./lib/stratum/index.js');
-var CliListener = require('./lib/workers/cliListener.js');
-var PoolWorker = require('./lib/workers/poolWorker.js');
-var Website = require('./lib/workers/website.js');
-var logging = require('./lib/modules/logging.js');
-
+if (!process.argv[3]) {
+    var config = require('./config.json');
+} else {
+    var config = require('./' + process.argv[3] + '_config.json');
+}
 var coinFilePath = 'coins/' + config.coin;
 
 if (!fs.existsSync(coinFilePath))
