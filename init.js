@@ -120,11 +120,12 @@ function startCliListener()
                 Object.keys(cluster.workers).forEach(function(id) {
                     cluster.workers[id].send({
                         type: 'blocknotify',
+                        workid: cluster.workers[id],
                         coin: params[0],
                         hash: params[1]
                     });
                 });
-                reply('Workers notified');
+                reply('Pool notified');
                 break;
 
             default:
