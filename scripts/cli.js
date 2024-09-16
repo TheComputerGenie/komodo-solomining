@@ -12,8 +12,9 @@ for (var i = 0; i < args.length; i++)
     if (args[i].indexOf('-') === 0 && args[i].indexOf('=') !== -1) {
         var s = args[i].substr(1).split('=');
         options[s[0]] = s[1];
-    } else
-    { params.push(args[i]); }
+    } else {
+        params.push(args[i]);
+    }
 }
 
 var command = params.shift();
@@ -28,12 +29,15 @@ var client = net.connect(options.port || defaultPort, options.host || defaultHos
         options: options
     }) + '\n');
 }).on('error', function(error)
+
 {
-    if (error.code === 'ECONNREFUSED')
-    { console.log('Could not connect to Z-NOMP instance at ' + defaultHost + ':' + defaultPort); }
-    else
-    { console.log('Socket error ' + JSON.stringify(error)); }
+    if (error.code === 'ECONNREFUSED') {
+        console.log('Could not connect to Z-NOMP instance at ' + defaultHost + ':' + defaultPort);
+    } else {
+        console.log('Socket error ' + JSON.stringify(error));
+    }
 }).on('data', function(data)
+
 {
     console.log(data.toString());
 }).on('close', function() {});

@@ -12,6 +12,7 @@ var Website = require('./lib/workers/website.js');
 var logging = require('./lib/modules/logging.js');
 
 var coinFilePath = 'coins/' + config.coin;
+
 if (!fs.existsSync(coinFilePath))
 {
     console.log('Master', config.coin, 'could not find file: ' + coinFilePath);
@@ -27,39 +28,46 @@ config.coin = coinProfile;
 try
 {
     var posix = require('posix');
+
     try {
         posix.setrlimit('nofile', {
             soft: 100000,
             hard: 100000
         });
     } catch (e) {
-        if (cluster.isMaster)
-        { logging('Init','debug', 'POSIX', 'Connection Limit', '(Safe to ignore) Must be ran as root to increase resource limits'); }
-    } finally {
+        if (cluster.isMaster) {
+            logging('Init','debug', 'POSIX', 'Connection Limit', '(Safe to ignore) Must be ran as root to increase resource limits');
+        }
+    }
+
+    finally {
         // Find out which user used sudo through the environment variable
         var uid = parseInt(process.env.SUDO_UID);
         // Set our server's uid to that user
-        if (uid) {
+        if (uid)
+        {
             process.setuid(uid);
             logging('Init', 'debug', 'POSIX', 'Connection Limit', 'Raised to 100K concurrent connections, now running as non-root user: ' + process.getuid());
         }
     }
 } catch (e)
 {
-    if (cluster.isMaster)
-    { console.log('POSIX Connection Limit (Safe to ignore) POSIX module not installed and resource (connection) limit was not raised'); }
+    if (cluster.isMaster) {
+        console.log('POSIX Connection Limit (Safe to ignore) POSIX module not installed and resource (connection) limit was not raised');
+    }
 }
 
 
 if (cluster.isWorker)
 {
     switch (process.env.workerType) {
-    case 'pool':
-        new PoolWorker();
-        break;
-    case 'website':
-        new Website();
-        break;
+        case 'pool':
+            new PoolWorker();
+            break;
+
+        case 'website':
+            new Website();
+            break;
     }
 
     return;
@@ -69,12 +77,18 @@ if (cluster.isWorker)
 function spawnPoolWorkers()
 {
     var numForks = (function() {
-        if (!config.clustering || !config.clustering.enabled)
-        { return 1; }
-        if (config.clustering.forks === 'auto')
-        { return os.cpus().length; }
-        if (!config.clustering.forks || isNaN(config.clustering.forks))
-        { return 1; }
+        if (!config.clustering || !config.clustering.enabled) {
+            return 1;
+        }
+
+        if (config.clustering.forks === 'auto') {
+            return os.cpus().length;
+        }
+
+        if (!config.clustering.forks || isNaN(config.clustering.forks)) {
+            return 1;
+        }
+
         return config.clustering.forks;
     })();
 
@@ -96,17 +110,18 @@ function spawnPoolWorkers()
                 createPoolWorker(forkId);
             }, 2000);
         }).on('message', function(msg) {
+
             switch (msg.type) {
-            case 'banIP':
-                Object.keys(cluster.workers).forEach(function(id) {
-                    if (cluster.workers[id].type === 'pool') {
-                        cluster.workers[id].send({
-                            type: 'banIP',
-                            ip: msg.ip
-                        });
-                    }
-                });
-                break;
+                case 'banIP':
+                    Object.keys(cluster.workers).forEach(function(id) {
+                        if (cluster.workers[id].type === 'pool') {
+                            cluster.workers[id].send({
+                                type: 'banIP',
+                                ip: msg.ip
+                            });
+                        }
+                    });
+                    break;
             }
         });
     }
@@ -115,6 +130,7 @@ function spawnPoolWorkers()
     var spawnInterval = setInterval(function() {
         createPoolWorker(i);
         i++;
+
         if (i == numForks) {
             clearInterval(spawnInterval);
             logging('Init', 'debug', 'Spawned proxy on ' + numForks + ' threads(s)')
@@ -132,19 +148,20 @@ function startCliListener()
     }).on('command', function(command, params, options, reply) {
 
         switch (command) {
-        case 'blocknotify':
-            Object.keys(cluster.workers).forEach(function(id) {
-                cluster.workers[id].send({
-                    type: 'blocknotify',
-                    coin: params[0],
-                    hash: params[1]
+            case 'blocknotify':
+                Object.keys(cluster.workers).forEach(function(id) {
+                    cluster.workers[id].send({
+                        type: 'blocknotify',
+                        coin: params[0],
+                        hash: params[1]
+                    });
                 });
-            });
-            reply('Workers notified');
-            break;
-        default:
-            reply('unrecognized command "' + command + '"');
-            break;
+                reply('Workers notified');
+                break;
+
+            default:
+                reply('unrecognized command "' + command + '"');
+                break;
         }
     }).start();
 }
