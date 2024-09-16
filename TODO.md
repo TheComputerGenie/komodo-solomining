@@ -5,7 +5,7 @@
 - [ ] redo blockTemplate.js for komodo ecosystem
 - [ ] redo transactions.js for komodo ecosystem
 - [ ] Add more options - set print levels
-- [ ] remove POSIX
+- [x] remove POSIX
 - [ ] Remove unused depends
 - [ ] Fix colors/logging
 - [ ] Remove TLS

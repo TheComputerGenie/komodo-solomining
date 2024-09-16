@@ -25,39 +25,6 @@ var coinProfile = JSON.parse(fs.readFileSync(coinFilePath, {
 
 config.coin = coinProfile;
 
-try
-{
-    var posix = require('posix');
-
-    try {
-        posix.setrlimit('nofile', {
-            soft: 100000,
-            hard: 100000
-        });
-    } catch (e) {
-        if (cluster.isMaster) {
-            logging('Init','debug', 'POSIX', 'Connection Limit', '(Safe to ignore) Must be ran as root to increase resource limits');
-        }
-    }
-
-    finally {
-        // Find out which user used sudo through the environment variable
-        var uid = parseInt(process.env.SUDO_UID);
-        // Set our server's uid to that user
-        if (uid)
-        {
-            process.setuid(uid);
-            logging('Init', 'debug', 'POSIX', 'Connection Limit', 'Raised to 100K concurrent connections, now running as non-root user: ' + process.getuid());
-        }
-    }
-} catch (e)
-{
-    if (cluster.isMaster) {
-        console.log('POSIX Connection Limit (Safe to ignore) POSIX module not installed and resource (connection) limit was not raised');
-    }
-}
-
-
 if (cluster.isWorker)
 {
     switch (process.env.workerType) {
