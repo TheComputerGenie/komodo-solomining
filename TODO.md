@@ -9,7 +9,8 @@
 - [x] Remove unused depends
 - [x] Fix colors/logging
 - [x] Remove TLS
-- [ ] Remove banning
-- [ ] web page fixes
+- [x] Remove banning
+- [x] web page fixes
+- [ ] store blocks per coin
 - [ ] Add founders
 - [ ] Add MCL
