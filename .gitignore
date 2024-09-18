@@ -3,3 +3,5 @@ node_modules/
 config.json
 logs/*
 !logs/.gitkeep 
+
+scripts/blocknotify

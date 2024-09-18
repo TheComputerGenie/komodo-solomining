@@ -1,5 +1,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -9,13 +10,11 @@
 /*
 Contributed by Alex Petrov aka SysMan at sysman.net
 Updated by Alejandro Reyero - TodoJuegos.com
-
 Part of NOMP project
 Simple lightweight & fast - a more efficient block notify script in pure C.
 Platforms : Linux, BSD, Solaris (mostly OS independent)
 Build with:
     gcc blocknotify.c -o blocknotify
-
 Example usage in daemon coin.conf using default NOMP CLI port of 17117
     blocknotify="/bin/blocknotify 127.0.0.1:17117 dogecoin %s"
 */
@@ -28,25 +27,19 @@ int main(int argc, char **argv) {
     char host[200];
     char *p, *arg, *errptr;
     int port;
-
     if (argc < 3) {
         // print help
         printf("Block notify\n usage: <host:port> <coin> <block>\n");
         exit(1);
     }
-
     strncpy(host, argv[1], (sizeof(host)-1));
     p = host;
-
     if ((arg = strchr(p,':')) ) {
         *arg = '\0';
         errno = 0; // reset errno
         port = strtol(++arg, &errptr, 10);
-        if ((errno != 0) || (errptr == arg) ) {
-            fprintf(stderr, "port number fail [%s]\n", errptr);
-        }
+        if ((errno != 0) || (errptr == arg) ) { fprintf(stderr, "port number fail [%s]\n", errptr); }
     }
-
     snprintf(sendline, sizeof(sendline) - 1, "{\"command\":\"blocknotify\",\"params\":[\"%s\",\"%s\"]}\n", argv[2], argv[3]);
     sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     bzero(&servaddr, sizeof(servaddr));
