@@ -1,14 +1,14 @@
 ## TODO:
-- [ ] feken PONG!!!!!!
+- [x] feken PONG!!!!!!
 - [x] Set diff1
-- [ ] Adjust diff calcs
-- [ ] redo blockTemplate.js for komodo ecosystem
-- [ ] redo transactions.js for komodo ecosystem
-- [ ] Add more options - set print levels
+- [x] Adjust diff calcs
+- [x] redo blockTemplate.js for komodo ecosystem
+- [x] redo transactions.js for komodo ecosystem
+- [x] Add more options - set print levels
 - [x] remove POSIX
 - [x] Remove unused depends
 - [x] Fix colors/logging
-- [ ] Remove TLS
+- [x] Remove TLS
 - [ ] Remove banning
 - [ ] web page fixes
 - [ ] Add founders
