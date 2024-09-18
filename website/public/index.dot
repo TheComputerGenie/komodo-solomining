@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/async/0.2.7/async.min.js"></script>
-    <script src="main.js"></script>
+    <script src="main.js" data-args=[[= model.settings.coin.symbol]]>></script>
     <meta charset="utf-8">
     <style>
         .legend {
@@ -33,10 +33,14 @@
 </head>
 
 <body>
+<script>
+  var mmodel = [[= JSON.stringify(model) ]];
+  console.log(mmodel);
+</script>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
           <div class="navbar-header">
-              <a class="navbar-brand" href="/">Equihash Solomining</a>
+              <a class="navbar-brand" href="/">[[= model.settings.coin.name]] Solomining</a>
           </div>
           <ul class="nav navbar-nav">
               <li class="active"><a href="/">Home</a></li>

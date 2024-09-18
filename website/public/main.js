@@ -2,7 +2,7 @@ window.onload = function()
 {
     blocks(done);
 }
-
+const args=document.currentScript.dataset.args.split(',');
 function blocks(cback)
 {
     httpRequest("/blocks.json", function(err, json) {
@@ -19,8 +19,8 @@ function blocks(cback)
             var theadTR = document.createElement('tr');
             var theadTH1 = document.createElement('th');
             var theadTH2 = document.createElement('th');
-            theadTH1.appendChild(document.createTextNode('Finder'));
-            theadTH2.appendChild(document.createTextNode('Blocks'));
+            theadTH1.appendChild(document.createTextNode(args));
+            theadTH2.appendChild(document.createTextNode('Blocks of '+ array.length));
             theadTR.appendChild(theadTH1);
             theadTR.appendChild(theadTH2);
             thead.appendChild(theadTR);
@@ -67,8 +67,14 @@ function blocks(cback)
                 var cell1 = document.createElement("td");
                 var cell2 = document.createElement("td");
                 var cell3 = document.createElement("td");
-                cell1.appendChild(document.createTextNode(array[i].block))
+                cell1.appendChild(document.createTextNode(''))
+                var link = document.createElement('a');
+                link.href = "https://"+args+".explorer.dexstats.info/block-index/"+array[i].block;
+                link.setAttribute("target", "_blank");
+                link.innerText = array[i].block;
+                cell1.appendChild(link);
                 cell2.appendChild(document.createTextNode(array[i].finder))
+                
                 var d = new Date(array[i].date);
                 cell3.appendChild(document.createTextNode(d))
                 row.appendChild(cell1);
@@ -91,9 +97,9 @@ function blocks(cback)
 
             Object.keys(data).forEach(function(i) {
                 var obj = {};
-                obj.label = i
-                            obj.value = data[i].length
-                                        array.push(obj)
+                obj.label = i;
+                obj.value = data[i].length;
+                array.push(obj);
             });
 
             var legendRectSize = 18;
@@ -110,20 +116,14 @@ function blocks(cback)
                       .innerRadius(0)
                       .outerRadius(radius);
 
-            var pie = d3.pie()
-            .value(function(d) {
-                return d.value;
-            })
-            .sort(null);
+            var pie = d3.pie().value(function(d) { return d.value; }).sort(null);
 
             var path = svg.selectAll('path')
                        .data(pie(array))
                        .enter()
                        .append('path')
                        .attr('d', arc)
-            .attr('fill', function(d, i) {
-                return color(d.data.label);
-            });
+            .attr('fill', function(d, i) { return color(d.data.label); });
 
             var legend = svg.selectAll('.legend')
                          .data(color.domain())
@@ -147,145 +147,25 @@ function blocks(cback)
             legend.append('text')
             .attr('x', legendRectSize + legendSpacing)
             .attr('y', legendRectSize - legendSpacing)
-            .text(function(d, i) {
-                return array[i].label;
-            });
+            .text(function(d, i) { return array[i].label; });
 
             cback(null, "createBlocksChart(" + data + ")")
         }
 
-        function createFindersChart(data, cback) {
-            var links = [];
-            var nodes = [];
-
-            var bubbles = null;
-
-            var width = 1000;
-            height = 500;
-
-            var svg = d3.select("#blockschart")
-                      .append("svg")
-                      .attr("width", width)
-                      .attr("height", height)
-
-            Object.keys(data).forEach(function(i) { //Sort JSON to be usable in node/link fashion
-                data[i].forEach(function(x, index) {
-                    var obj = {};
-                    obj.source = i;
-                    obj.target = x.block;
-                    links.push(obj)
-                })
-            });
-
-            var nodeArr = links.map(function(d) {
-                return [d.source, d.target]
-            }).join().split(",");
-
-            var uniqueNodeArr = nodeArr.filter(function(d, i) {
-                return nodeArr.indexOf(d) == i
-            });
-
-            nodes = uniqueNodeArr.map(function(node, i) {
-                return {
-                    name: node
-                };
-            });
-
-
-            var simulation = d3.forceSimulation()
-                             .nodes(nodes)
-                             .force("charge_force", d3.forceManyBody().distanceMax(100))
-                             .force("center_force", d3.forceCenter(width / 2, height / 2));
-
-            var node = svg.append("g")
-                       .attr("class", "node")
-                       .selectAll("circle")
-                       .data(nodes)
-                       .enter()
-                       .append("circle")
-                       .attr("r", 5)
-                       .attr("fill", circleColor);
-
-            function circleColor(d) {
-                if (isNaN(d.name)) {
-                    console.log(d.name)
-                    return "blue";
-                } else {
-                    return "red";
-                }
-            }
-
-            var link_force = d3.forceLink(links)
-            .id(function(d) {
-                return d.name;
-            })
-            .distance(30)
-
-            simulation.force("links", link_force)
-
-            var link = svg.append("g")
-                       .attr("class", "link")
-                       .selectAll("line")
-                       .data(links)
-                       .enter().append("line")
-
-            function tickActions() {
-                //update circle positions to reflect node updates on each tick of the simulation
-                node
-                .attr("cx", function(d) {
-                    return d.x;
-                })
-                .attr("cy", function(d) {
-                    return d.y;
-                })
-
-                link
-                .attr("x1", function(d) {
-                    return d.source.x;
-                })
-                .attr("y1", function(d) {
-                    return d.source.y;
-                })
-                .attr("x2", function(d) {
-                    return d.target.x;
-                })
-                .attr("y2", function(d) {
-                    return d.target.y;
-                });
-            }
-
-            simulation.on("tick", tickActions);
-            simulation.force("links", link_force)
-
-            cback(null, "createFindersChart(" + data + ")")
-        }
-
         async.parallel([
-        function(callback) {
-            finderInfoTable(callback)
-        },
-        function(callback) {
-            blocksTable(callback)
-        },
-        function(callback) {
-            createBlocksChart(groupedByFinder, callback)
-        },
-        function(callback) {
-            createFindersChart(groupedByFinder, callback)
-        }
-                       ], function(err, results) {
+            function(callback) { finderInfoTable(callback) },
+            function(callback) { blocksTable(callback) },
+            function(callback) { createBlocksChart(groupedByFinder, callback) }
+        ], function(err, results) {
             cback("blocks() which called " + results)
         });
     });
 }
 
 
-function httpRequest(req, cback)
-{
+function httpRequest(req, cback) {
     var request = new XMLHttpRequest()
-
     request.open('GET', req);
-
     request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
             var data = request.responseText;
@@ -294,11 +174,7 @@ function httpRequest(req, cback)
             cback(request.status, null);
         }
     }
-
-    request.onerror = function() {
-        cback("Couldn't get the data :(", null);
-    };
-
+    request.onerror = function() { cback("Couldn't get the data :(", null); };
     request.send();
 }
 
@@ -310,7 +186,4 @@ function groupBy(xs, key)
     }, {})
 }
 
-function done(func)
-{
-    console.log(func + " is done");
-}
+function done(func) { console.log(func + " is done"); }
