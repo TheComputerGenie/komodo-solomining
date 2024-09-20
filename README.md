@@ -1,6 +1,6 @@
 ## Solomining for Komodo ecosystem.
 ## (NOT READY FOR TESTING!!!!!!!!!!!!!!)
-
+![](./Screenshot.png)
 ## The solo miner's solo pool
 The objective is a "light-weight" pool that does what needs to be done.  
 We're no longer calling this a "poxy" as that term was meant to bridge getwork and stratum and no client even has getwork anymore.  
@@ -11,7 +11,7 @@ This pool will **not** work for MCL (due to alternating blocks using CCs), to co
 Requirements
 ------------
 * node v21.4+ (installs by following "Install" below)
-* coin daemon 
+* coin daemon
 
 Install (Ubuntu)
 -------------
@@ -54,13 +54,13 @@ npm start
 ```
 
 Update (normally)
-------------- 
+-------------
 ```bash
 git pull
 ```
 
 Update (including any module changes )
-------------- 
+-------------
 ```bash
 git pull
 rm -rf node_modules
@@ -83,7 +83,7 @@ Notes and known issues:
 many hands in the jar and no "standard" of style. Over time, the base has become the spagetti that NOMP was written to
 avoid, and over time that will be changed.
 
-* (N KI) Web pages use online resources for css and some of the js. These min files are "standard", used on countless sites, 
+* (N KI) Web pages use online resources for css and some of the js. These min files are "standard", used on countless sites,
 can be checked at your discretion, and may or may not be localized at some future point.
 
 * (N) There is no TLS functionality, because I'm not sure I could ever be convinced of need for a solo setup.
