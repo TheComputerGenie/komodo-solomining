@@ -1,14 +1,10 @@
-window.onload = function()
-{
-    blocks(done);
-}
-const args=document.currentScript.dataset.args.split(',');
+const args = document.currentScript.dataset.args.split(',');
+document.addEventListener("DOMContentLoaded", function(){ blocks(done) });
 
 function blocks(cback)
 {
     httpRequest("/blocks.json", function(err, json) {
         array = JSON.parse(json); //Sample: [{"block":48759,"finder":"rx480","date":1490404074912},{"block":48760,"finder":"rx470","date":1490404148117}]
-        //console.log(array);
         var groupedByFinder = groupBy(array, 'finder');
 
         function finderInfoTable(cback) {
