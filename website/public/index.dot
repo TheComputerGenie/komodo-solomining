@@ -2,92 +2,92 @@
 <html>
 
 <head lang="en">
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/async/0.2.7/async.min.js"></script>
-    <script src="main.js" data-args=[[= model.settings.coin.symbol]]>></script>
-    <meta charset="utf-8">
-    <style>
-        .legend {
-            font-size: 12px;
-        }
-
-        rect {
-            stroke-width: 2;
-        }
-
-        .node {
-            fill: #ccc;
-            stroke: #fff;
-            stroke-width: 2px;
-        }
-
-        .link {
-            stroke: #777;
-            stroke-width: 2px;
-        }
-
-    </style>
-</head>
-
-<body>
-<script>
-  var mmodel = [[= JSON.stringify(model) ]];
-  console.log(mmodel);
-</script>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-          <div class="navbar-header">
-              <a class="navbar-brand" href="/">[[= model.settings.coin.name]] Solomining</a>
-          </div>
-          <ul class="nav navbar-nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="/api">API</a></li>
-          </ul>
-    </nav>
-    <div class="container">
-        <h3>Daemon Status</h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <th>Block Height</th>
-                        <th>Network Hashrate</th>
-                        <th>Difficulty</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>[[= model.blocks]]</td>
-                            <td>[[= model.hashrate]] Sol/s</td>
-                            <td>[[= model.difficulty]]</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <head>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/async/3.2.6/async.js"></script>
+        <script src="main.js" data-args=[[=model.settings.coin.symbol]]></script>
+        <link rel="icon" href="#">
+        <meta charset="utf-8">
+        <style>
+            .legend {
+                font-size: 14px;
+            }
+            rect {
+                stroke-width: 2;
+            }
+            .node {
+                fill: #ccc;
+                stroke: #fff;
+                stroke-width: 2px;
+            }
+            .link {
+                stroke: #777;
+                stroke-width: 2px;
+            }
+        </style>
+    </head>
+    <body class="text-center">
+        <script>
+            var mmodel = [[= JSON.stringify(model) ]];
+            //console.log(mmodel);
+        </script>
+        <nav class="navbar navbar-expand-lg bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#">[[= model.settings.coin.name]] Solomining</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active text-secondary" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="/api">API</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <h3>Daemon Status</h3>
+            <hr>
+            <div class="row justify-content-md-center">
+                <div class="col-md-6">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <th>Block Height</th>
+                            <th>Network Hashrate</th>
+                            <th>Difficulty</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>[[= model.blocks]]</td>
+                                <td>[[= model.hashrate]] Sol/s</td>
+                                <td>[[= model.difficulty]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br><br><br>
+            <h3>Mining Stats</h3>
+            <hr>
+            <div class="row">
+                <div class="col-md-8 col-sm-6" id="piechart"></div>
+                <div class="col-md-4 sidebar col-sm-6" id="info"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="blockschart"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12" id="blocks"></div>
             </div>
         </div>
-        <br>
-        <hr>
-        <h3>Stats</h3>
-        <hr>
-        <br>
-        <div class="row">
-            <div class="col-md-8 col-sm-6" id="piechart">
-            </div>
-            <div class="col-md-4 sidebar col-sm-6" id="info">
-            </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12" id="blockschart">
-          </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12" id="blocks">
-            </div>
-        </div>
-    </div>
-</body>
-
+    </body>
 </html>

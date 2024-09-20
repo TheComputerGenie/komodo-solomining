@@ -3,10 +3,12 @@ window.onload = function()
     blocks(done);
 }
 const args=document.currentScript.dataset.args.split(',');
+
 function blocks(cback)
 {
     httpRequest("/blocks.json", function(err, json) {
         array = JSON.parse(json); //Sample: [{"block":48759,"finder":"rx480","date":1490404074912},{"block":48760,"finder":"rx470","date":1490404148117}]
+        //console.log(array);
         var groupedByFinder = groupBy(array, 'finder');
 
         function finderInfoTable(cback) {
@@ -19,7 +21,7 @@ function blocks(cback)
             var theadTR = document.createElement('tr');
             var theadTH1 = document.createElement('th');
             var theadTH2 = document.createElement('th');
-            theadTH1.appendChild(document.createTextNode(args));
+            theadTH1.appendChild(document.createTextNode('Finder'));
             theadTH2.appendChild(document.createTextNode('Blocks of '+ array.length));
             theadTR.appendChild(theadTH1);
             theadTR.appendChild(theadTH2);
@@ -186,4 +188,6 @@ function groupBy(xs, key)
     }, {})
 }
 
-function done(func) { console.log(func + " is done"); }
+function done(func) {
+    //console.log(func + " is done");
+}
