@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     close(sockfd);
 
     if(result == -1) {
-        printf("Error sending: %i\n", errno);
+        printf("Error sending to pool: %i\n", errno);
         exit(-1);
     }
     exit(0);
