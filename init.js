@@ -124,10 +124,10 @@ function startWebsite()
 function createEmptyLogs()
 {
     try {
-        fs.readFileSync('./logs/blocks.json')
+        fs.readFileSync('./logs/' + config.coin.symbol + '_blocks.json')
     } catch (err) {
         if (err.code === "ENOENT") {
-            fs.writeFileSync('./logs/blocks.json', '[]');
+            fs.writeFileSync('./logs/' + config.coin.symbol + '_blocks.json', '[]');
         } else {
             throw err;
         }

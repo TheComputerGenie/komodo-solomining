@@ -2,6 +2,6 @@ node_modules/
 .idea/
 config.json
 logs/*
-!logs/.gitkeep 
-
+!logs/backup/.gitkeep 
+!logs/backup
 scripts/blocknotify

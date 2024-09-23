@@ -46,9 +46,11 @@
                 <hr>
             </div>
             <div class="row align-items-center">
-                <h2><a href="/blocks.json">/blocks.json <small>JSON</small></a></h2>
-                <p>Returns blocks found with their founder and milliseconds since the epoch.</p>
-                <p>Sample: <em>[{"block":48791,"finder":"rx470","date":1490504107869},{"block":48792,"finder":"rx470","date":1490506498711},{"block":48793,"finder":"t1RjQjDbPQ9Syp97DHFyzvgZhcjgLTMwhaq","date":1490506800295}]</em></p>
+                <h2><a href="/blocks.json">/blocks.json</a></h2>
+                <p>Returns [[=model.settings.coin.symbol]] (the current running coin) blocks found with their founder and milliseconds since the epoch.</p>
+                <p><em>Note: the call is "/blocks.json" (and visually apears to be so); however,</br>it will always return the settings.coin.symbol_blocks.json for the running coin.
+                [[=model.settings.coin.symbol]]_blocks.json in this case.</em></p>
+                <h5><small>Sample:</br>[{"block":48791,"finder":"rx470","date":1490504107869},{"block":48792,"finder":"rx470","date":1490506498711},{"block":48793,"finder":"t1RjQjDbPQ9Syp97DHFyzvgZhcjgLTMwhaq","date":1490506800295}]</small></h5>
             </div>
         </div>
     </body>
