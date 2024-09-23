@@ -22,6 +22,12 @@ if (!fs.existsSync(coinFilePath))
 
 config.coin = JSON.parse(fs.readFileSync(coinFilePath, { encoding: 'utf8' }));
 
+if (!config.coin.nonDexstatsExplorer) { 
+    config.coin.explorer = 'https://' + config.coin.symbol + '.explorer.dexstats.info';
+} else {
+    config.coin.explorer = config.coin.nonDexstatsExplorer;
+}
+
 if (cluster.isWorker)
 {
     switch (process.env.workerType) {
