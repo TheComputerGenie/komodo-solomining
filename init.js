@@ -20,11 +20,7 @@ if (!fs.existsSync(coinFilePath))
     return;
 }
 
-var coinProfile = JSON.parse(fs.readFileSync(coinFilePath, {
-    encoding: 'utf8'
-}));
-
-config.coin = coinProfile;
+config.coin = JSON.parse(fs.readFileSync(coinFilePath, { encoding: 'utf8' }));
 
 if (cluster.isWorker)
 {
@@ -32,12 +28,10 @@ if (cluster.isWorker)
         case 'pool':
             new PoolWorker();
             break;
-
         case 'website':
             new Website();
             break;
     }
-
     return;
 }
 
@@ -45,17 +39,9 @@ if (cluster.isWorker)
 function spawnPoolWorkers()
 {
     var numForks = (function() {
-        if (!config.clustering || !config.clustering.enabled) {
-            return 1;
-        }
-
-        if (config.clustering.forks === 'auto') {
-            return os.cpus().length;
-        }
-
-        if (!config.clustering.forks || isNaN(config.clustering.forks)) {
-            return 1;
-        }
+        if (!config.clustering || !config.clustering.enabled) { return 1; }
+        if (config.clustering.forks === 'auto') { return os.cpus().length; }
+        if (!config.clustering.forks || isNaN(config.clustering.forks)) { return 1; }
 
         return config.clustering.forks;
     })();
@@ -72,33 +58,14 @@ function spawnPoolWorkers()
         worker.type = 'pool';
         poolWorkers[forkId] = worker;
         worker.on('exit', function(code, signal) {
-            //console.log('[' + timestamp() + '] Fork ' + forkId + ' died, spawning replacement worker...'.red.underline.bold);
             logging('Pool', 'error', 'Fork ' + forkId + ' died, spawning replacement worker...', forkId)
-            setTimeout(function() {
-                createPoolWorker(forkId);
-            }, 2000);
-        }).on('message', function(msg) {
-
-            switch (msg.type) {
-                case 'banIP':
-                    Object.keys(cluster.workers).forEach(function(id) {
-                        if (cluster.workers[id].type === 'pool') {
-                            cluster.workers[id].send({
-                                type: 'banIP',
-                                ip: msg.ip
-                            });
-                        }
-                    });
-                    break;
-            }
+            setTimeout(function() { createPoolWorker(forkId); }, 2000);
         });
     }
-
     var i = 0;
     var spawnInterval = setInterval(function() {
         createPoolWorker(i);
         i++;
-
         if (i == numForks) {
             clearInterval(spawnInterval);
             logging('Init', 'debug', 'Spawned proxy on ' + numForks + ' threads(s)')
@@ -109,12 +76,10 @@ function spawnPoolWorkers()
 function startCliListener()
 {
     var cliPort = config.cliPort;
-
     var listener = new CliListener(cliPort);
     listener.on('log', function(text) {
         console.log('CLI: ' + text);
     }).on('command', function(command, params, options, reply) {
-
         switch (command) {
             case 'blocknotify':
                 Object.keys(cluster.workers).forEach(function(id) {
@@ -137,10 +102,7 @@ function startCliListener()
 
 function startWebsite()
 {
-    if (!config.website.enabled) {
-        return;
-    }
-
+    if (!config.website.enabled) { return; }
     var worker = cluster.fork({
         workerType: 'website',
         config: JSON.stringify(config)
