@@ -67,7 +67,7 @@ function blocks(cback)
                 var cell3 = document.createElement("td");
                 cell1.appendChild(document.createTextNode(''))
                 var link = document.createElement('a');
-                link.href = args+"/block-index/"+array[i].block;
+                link.href = args[1]+"/block-index/"+array[i].block;
                 link.setAttribute("target", "_blank");
                 link.innerText = array[i].block;
                 cell1.appendChild(link);
