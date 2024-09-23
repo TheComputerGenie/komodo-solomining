@@ -1,6 +1,7 @@
 {
     "name": "Vaporum",
     "symbol": "VPRM",
+    "nonDexstatsExplorer": "http://explorer.vaporumcoin.us",
     "algorithm": "equihash",
     "peerMagic": "c40dc9cb",
     "txfee": 0.0001

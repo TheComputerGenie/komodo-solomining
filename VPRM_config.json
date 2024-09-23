@@ -1,0 +1,49 @@
+{
+    "coin": "VPRM.json",
+    "printShares": false,
+    "printHighShares": true,
+    "printNethash": false,
+    "minDiffAdjust": true,
+    "printSubmissions": true,
+    "jobRebroadcastTimeout": 37,
+    "connectionTimeout": 6000000,
+    "emitInvalidBlockHashes": false,
+    "address": "RESWsMfWFvPGGUPGfGgXPgGKWeqVaAtUfy",
+    "pubkey": "02592809a25cd27cca40ea6ccb04a40a79b3108d3991761412f12db9773f336078",
+    "ports": {
+        "5332": {
+            "diff": 300
+        },
+        "5333": {
+            "diff": 1500
+        },
+        "5334": {
+            "diff": 30000
+        }
+    },
+    "daemons": [
+        {
+            "host": "127.0.0.1",
+            "port": 51609,
+            "user": "MyUser",
+            "password": "MyPass"
+        }
+    ],
+    "p2p": {
+        "enabled": true,
+        "host": "127.0.0.1",
+        "port": 51608,
+        "disableTransactions": true
+    },
+    "blockRefreshInterval": 10,
+    "website": {
+        "enabled": true,
+        "host": "0.0.0.0",
+        "port": "8088"
+    },
+    "cliPort": 17117,
+    "clustering": {
+        "enabled": true,
+        "forks": 3
+    }
+}
