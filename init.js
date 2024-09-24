@@ -7,26 +7,17 @@ const logging = require('./lib/modules/logging.js');
 const PoolWorker = require('./lib/workers/poolWorker.js');
 const CliListener = require('./lib/workers/cliListener.js');
 
-if (!process.argv[3]) {
-    var config = require('./config.json');
-} else {
-    var config = require('./' + process.argv[3] + '_config.json');
-}
-var coinFilePath = 'coins/' + config.coin;
+var config = (process.argv[3] ? require(`./${process.argv[3]}_config.json`) : require('./config.json'));
+var coinFilePath = `coins/${config.coin}`;
 
 if (!fs.existsSync(coinFilePath))
 {
-    console.log('Master', config.coin, 'could not find file: ' + coinFilePath);
+    console.log('Master', config.coin, `could not find file: ${coinFilePath}`);
     return;
 }
 
 config.coin = JSON.parse(fs.readFileSync(coinFilePath, { encoding: 'utf8' }));
-
-if (!config.coin.nonDexstatsExplorer) { 
-    config.coin.explorer = 'https://' + config.coin.symbol + '.explorer.dexstats.info';
-} else {
-    config.coin.explorer = config.coin.nonDexstatsExplorer;
-}
+config.coin.explorer = (config.coin.nonDexstatsExplorer ? config.coin.nonDexstatsExplorer : `https://${config.coin.symbol}.explorer.dexstats.info`);
 
 if (cluster.isWorker)
 {
@@ -41,10 +32,9 @@ if (cluster.isWorker)
     return;
 }
 
-
 function spawnPoolWorkers()
 {
-    var numForks = (function() {
+    var numForks = (() => {
         if (!config.clustering || !config.clustering.enabled) { return 1; }
         if (config.clustering.forks === 'auto') { return os.cpus().length; }
         if (!config.clustering.forks || isNaN(config.clustering.forks)) { return 1; }
@@ -63,18 +53,18 @@ function spawnPoolWorkers()
         worker.forkId = forkId;
         worker.type = 'pool';
         poolWorkers[forkId] = worker;
-        worker.on('exit', function(code, signal) {
-            logging('Pool', 'error', 'Fork ' + forkId + ' died, spawning replacement worker...', forkId)
-            setTimeout(function() { createPoolWorker(forkId); }, 2000);
+        worker.on('exit', (code, signal) => {
+            logging('Pool', 'error', `Fork ${forkId} died, spawning replacement worker...`, forkId)
+            setTimeout(() => { createPoolWorker(forkId); }, 2000);
         });
     }
     var i = 0;
-    var spawnInterval = setInterval(function() {
+    var spawnInterval = setInterval(() => {
         createPoolWorker(i);
         i++;
         if (i == numForks) {
             clearInterval(spawnInterval);
-            logging('Init', 'debug', 'Spawned proxy on ' + numForks + ' threads(s)')
+            logging('Init', 'debug', `Spawned pool on ${numForks} threads(s)`)
         }
     }, 250);
 }
@@ -83,12 +73,12 @@ function startCliListener()
 {
     var cliPort = config.cliPort;
     var listener = new CliListener(cliPort);
-    listener.on('log', function(text) {
+    listener.on('log', (text) => {
         console.log('CLI: ' + text);
-    }).on('command', function(command, params, options, reply) {
+    }).on('command', (command, params, options, reply) => {
         switch (command) {
             case 'blocknotify':
-                Object.keys(cluster.workers).forEach(function(id) {
+                Object.keys(cluster.workers).forEach(id => {
                     cluster.workers[id].send({
                         type: 'blocknotify',
                         workid: cluster.workers[id],
@@ -98,9 +88,8 @@ function startCliListener()
                 });
                 reply('Pool notified');
                 break;
-
             default:
-                reply('unrecognized command "' + command + '"');
+                reply(`unrecognized command \"${command}\"`);
                 break;
         }
     }).start();
@@ -113,9 +102,9 @@ function startWebsite()
         workerType: 'website',
         config: JSON.stringify(config)
     });
-    worker.on('exit', function(code, signal) {
+    worker.on('exit', (code, signal) => {
         logging('Website', 'error', 'Website process died, spawning replacement...')
-        setTimeout(function() {
+        setTimeout(() => {
             startWebsite(config);
         }, 2000);
     });
@@ -124,18 +113,17 @@ function startWebsite()
 function createEmptyLogs()
 {
     try {
-        fs.readFileSync('./logs/' + config.coin.symbol + '_blocks.json')
+        fs.readFileSync(`./logs/${config.coin.symbol}_blocks.json`)
     } catch (err) {
         if (err.code === "ENOENT") {
-            fs.writeFileSync('./logs/' + config.coin.symbol + '_blocks.json', '[]');
+            fs.writeFileSync(`./logs/${config.coin.symbol}_blocks.json`, '[]');
         } else {
             throw err;
         }
     }
 }
 
-(function init()
-{
+(function init(){
     createEmptyLogs();
     spawnPoolWorkers();
     startCliListener();
