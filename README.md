@@ -70,7 +70,7 @@ npm install
 Differences between this and Z-NOMP
 ------------
 * This is meant for solo mining.
-* There is no share system.
+* There is no share-based pay system.
 * No payments (coins go directly to the address in config).
 * NO equihashverify - While this pool will work with rentals (NiceHash checked at the time of publishing), it is intended
 for the true solo miner, who needs no such protection against fake shares.
@@ -80,13 +80,13 @@ Notes and known issues:
 * (KI) VarDiff is broken.
 
 * (N) If the code looks like it has 9 styles of writing, that because it does. It was a long journey from NOMP to here with
-many hands in the jar and no "standard" of style. Over time, the base has become the spagetti that NOMP was written to
+many hands in the jar and no "standard" of style. Over time, the base has become the spaghetti that NOMP was written to
 avoid, and over time that will be changed.
 
 * (N KI) Web pages use online resources for css and some of the js. These min files are "standard", used on countless sites,
 can be checked at your discretion, and may or may not be localized at some future point.
 
-* (N) There is no TLS functionality, because I'm not sure I could ever be convinced of need for a solo setup.
+* (N) There is no TLS or miner banning functionality, because I'm not sure I could ever be convinced of need for a solo setup.
 
 License
 -------

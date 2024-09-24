@@ -1,12 +1,14 @@
 {
   "name": "komodo-solomining",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "High performance Stratum poolserver in Node.js",
   "keywords": [
     "stratum",
     "mining",
     "pool",
     "server",
+    "komodo",
+    "kmd",
     "poolserver"
   ],
   "homepage": "https://github.com/TheComputerGenie/komodo-solomining",
@@ -23,6 +25,14 @@
     {
       "name": "aayanl",
       "url": "https://github.com/aayanl/equihash-solomining"
+    },
+    {
+      "name": "hellcatz",
+      "url": "https://github.com/hellcatz"
+    },
+    {
+      "name": "z-classic developers",
+      "url": "https://github.com/z-classic"
     },
     "vekexasia",
     "TheSeven",
