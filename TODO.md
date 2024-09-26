@@ -11,6 +11,7 @@
 - [x] Remove TLS
 - [x] Remove banning
 - [x] web page fixes
-- [ ] store blocks per coin
+- [x] store blocks per coin
+- [x] add varDiff
 - [ ] Add founders
 - [ ] Add MCL
