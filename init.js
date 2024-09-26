@@ -64,7 +64,7 @@ function spawnPoolWorkers()
         i++;
         if (i == numForks) {
             clearInterval(spawnInterval);
-            logging('Init', 'debug', `Spawned pool on ${numForks} threads(s)`)
+            logging(' Init ', 'debug', `Spawned pool on ${numForks} threads(s)`)
         }
     }, 250);
 }
