@@ -1,58 +1,57 @@
-config.json
-```javascript
-{
-    "coin": "KMD.json",                                 // the file in 'coins' folder that defines current used coin
-    "address": "RQf6QUVqtcv6D63Tf8njZDphNG9f9tfyHm",    // the transparent address you want reward to go to
-    "pubkey": "0259283991761412f12db9773f336078",       // for chains that pay to a pubkey, you must add your pubkey
-    "daemons": [                                        // any number of access allowed daemons -- for most users this will only be 1 local daemon
-        {
-            "host": "127.0.0.1",    // IP address -- 127.0.0.1 is the same PC as pool
-            "port": 45453,          // open port -- can be found with `getinfo` call
-            "user": "MyUser",       // rpcuser set in the ./komodo/COIN/coin.conf file
-            "password": "MyPass"    // rpcpassword set in the ./komodo/COIN/coin.conf file
-        }                           // ends with }, if more than one; ends with } if last/only one
-    ],
-    "p2p": {
-        "enabled": true,                // true for connecting to daemon as peer -- recomended
-        "host": "127.0.0.1",            // IP address -- 127.0.0.1 is the same PC as pool -- generally same as daemon
-        "port": 45452,                  // open port -- can be found with `getinfo` call
-        "disableTransactions": false    // allow peers to relay transactions -- set "true" unless you know why "false"
-    },
-    "ports": {          // This is where you set ports and difficulty levels for miners to connect
-        "3850": {       // Port to open for miners
-            "diff": 2   // difficulty for that port -- 1 Difficulty is actually 8192, 0.125 Difficulty is actually 1024 
-        },              // ends with }, if more than one
-        "3851": {
-            "diff": 10
-        }               // ends with } if last/only one
-    },
-    "website": {
-        "enabled": true,
-        "host": "0.0.0.0",
-        "port": "8088"
-    },
-    "blockRefreshInterval": 5,          // how many seconds apart to ask daemon for block info -- 0 (disable) is fine if P2P enabled
-    "jobRebroadcastTimeout": 70,        // how many seconds apart to ask daemon for newest tx info and give miners new work
-    "connectionTimeout": 6000000,       // how man ms to allow a miner to go without sending something before disconnecting them
-    "tcpProxyProtocol": false,          // set false -- while this may be usable in solo, I'm not sure all of the code is intact
-    "clustering": {                     // pool attempts load self-balancing through multi-threading
-        "enabled": false,               // If you have a lot of miners that connect individually, set true otherwise 1 is plenty
-        "forks": 3                      // how many distinct threads you want open
-    },
-    "cliPort": 17117,                   // what port to open for blocknotify -- must be set even if you don't use blocknotify
-    "blockNotifyListener": {
-        "enabled": false,               // leave false -- meaningless and not even coded for left in to make a point
-        "port": 17118                   // that no one has audited this code/config since 2014
-    }
-}
-```
 
-KMD.json
-```javascript
-{
-    "name": "Komodo",           // The name of the coin
-    "symbol": "KMD",            // The coin's ticker symbol
-    "peerMagic": "f9eee48d",    // easiest way to find this is run daemon -- magic.17b6e058 becomes 58e0b617
-    "txfee": 0.0001             // min tx fee -- almost always 0.0001 for Komodo and assetchains -- meaningless for solo
-}
-```
+:large_blue_diamond: config.json (or COINX_config.json)
+
+| Key      | Example Value      | Meaning      |
+| :------------- | :------------- | :------------- |
+|coin|KMD.json|the file in `coins` directory that defines current used coin|
+|printShares|false|`Boolean`: print every share from every miner in the pool's output|
+|printHighShares|true|`Boolean`: print if a share that is 50% or higher of the block target was found|
+|printNethash|false|`Boolean`: print the estimated network hashrate each time the block template is scraped|
+|minDiffAdjust|true|`Boolean`: *true* = use port diff; *false* = don't submit any shares less than the block diff|
+|printVarDiffAdjust|false|`Boolean`: print each time a miner's vardiff difficulty is changed|
+|printCurrentDiff|false|`Boolean`: print the current block difficulty each time the block template is scraped|
+|printSubmissions|true|`Boolean`: print each time the pool submits a block|
+|jobRebroadcastTimeout|50|how many seconds apart to ask daemon for newest tx info and give miners new work|
+|connectionTimeout|6000000|how many ms to allow a miner to go without sending something back before disconnecting them|
+|emitInvalidBlockHashes|false|`Boolean`: doesn't do anything in solo but I'm too lazy to finish stripping it out of the code|
+|address|RESWsMfWFvPGGUPGfGgXPgGKWeqVaAtUfy|Your address **for the coin you're mining**|
+|pubkey|02592809a25cd27cca40ea6ccb04a40a79b3108d3991761412f12db9773f336078|the pubkey for your address **for the coin you're mining**|
+|ports:|||
+|<ul>*number*|5332|the port number you want miners to connect to for a given minimum share submission|
+|<p><ul><ul>diff|300|the **minimum difficulty** miners must hit for share submission|
+|<p><ul><ul>varDiff:||*(optional)*|
+|<p><ul><ul><ul>minDiff</ul>|30000|the **lowest** diff you want varDiff to assign|
+|<p><ul><ul><ul>maxDiff</ul>|1000000|the **highest** diff you want varDiff to assign|
+|<p><ul><ul><ul>targetTime</ul>|20|Try to get 1 share per this many seconds|
+|<p><ul><ul><ul>retargetTime</ul>|300|Check to see if we should retarget every this many seconds|
+|<p><ul><ul><ul>variancePercent</ul>|30|Allow time to very this % from target without retargeting|
+|daemons:|||
+|<ul>host|127.0.0.1|the IP address of your daemon|
+|<ul>port|7771|the `rpcport` your daemon uses for RPC|
+|<ul>user|MyUser|the `rpcuser` for your daemon|
+|<ul>password|MyPass|the `rpcpassword` for your daemon|
+|p2p:|||
+|<ul>enabled|true|`Boolean`: connect to a daemon as a peer|
+|<ul>host|127.0.0.1|the IP address of your P2P daemon (this may or may not be the same IP as your RPC daemon)|
+|<ul>port|7770|the `port` your daemon uses for P2P|
+|<ul>disableTransactions|true|`Boolean`: let the daemon send tx data to the pool the same as any other peer|
+|blockRefreshInterval|0|have the pool ask the daemon if there's been a new block found every this many seconds<br>Set to 0 for never if you have a solid P2P connection|
+|website:|||
+|<ul>enabled|true|`Boolean`: use the included web page to display blocks and finders|
+|<ul>host|0.0.0.0|the IP address host your web pages on<br>set to 0.0.0.0 as localhost unless you know what you're doing|
+|<ul>port|8088|the port you want to serve the web pages from|
+|cliPort|17117|the port you want to use for things like blocknotify|
+|clustering:|||
+|<ul>enabled|true|`Boolean`: run load-balancing threads|
+|<ul>forks|3|the number of threads you want to split workers across|
+
+:small_blue_diamond: coins/PIRATE.json (or coins/COINX.json)
+
+| Key      | Example Value      | Meaning      |
+| :------------- | :------------- | :------------- |
+|name|Pirate|The name of the coin|
+|symbol|ARRR|The coin's ticker symbol|
+|nonDexstatsExplorer|https://explorer.pirate.black|The coin's explorer if it isn't `cointicker.explorer.dexstats.info`|
+|peerMagic|58e0b617|easiest way to find this is run daemon -- magic.17b6e058 becomes 58e0b617|
+|txfee|0.0001|min tx fee -- almost always 0.0001 for Komodo and assetchains -- meaningless for solo|
+

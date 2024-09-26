@@ -1,11 +1,11 @@
 {
-    "coin": "VPRM.json",
+    "coin": "KMD.json",
     "printShares": false,
     "printHighShares": true,
     "printNethash": false,
     "minDiffAdjust": true,
     "printVarDiffAdjust": false,
-    "printCurrentDiff": true,
+    "printCurrentDiff": false,
     "printSubmissions": true,
     "jobRebroadcastTimeout": 50,
     "connectionTimeout": 6000000,
@@ -20,9 +20,9 @@
             "diff": 1500
         },
         "5334": {
-            "diff": 3000,
+            "diff": 100000,
             "varDiff": {
-                "minDiff": 3000,
+                "minDiff": 30000,
                 "maxDiff": 1000000,
                 "targetTime": 20,
                 "retargetTime": 300,
@@ -33,7 +33,7 @@
     "daemons": [
         {
             "host": "127.0.0.1",
-            "port": 51609,
+            "port": 7771,
             "user": "MyUser",
             "password": "MyPass"
         }
@@ -41,10 +41,10 @@
     "p2p": {
         "enabled": true,
         "host": "127.0.0.1",
-        "port": 51608,
+        "port": 7770,
         "disableTransactions": true
     },
-    "blockRefreshInterval": 10,
+    "blockRefreshInterval": 0,
     "website": {
         "enabled": true,
         "host": "0.0.0.0",

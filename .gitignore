@@ -1,6 +1,5 @@
 node_modules/
 .idea/
-config.json
 logs/*
 !logs/backup/.gitkeep 
 !logs/backup

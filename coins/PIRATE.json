@@ -1,6 +1,7 @@
 {
     "name": "Pirate",
     "symbol": "ARRR",
+    "nonDexstatsExplorer": "https://explorer.pirate.black",
     "algorithm": "equihash",
     "peerMagic": "58e0b617",
     "txfee": 0.0001
