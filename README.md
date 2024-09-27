@@ -77,7 +77,7 @@ for the true solo miner, who needs no such protection against fake shares.
 
 Notes and known issues:
 ------------
-* (KI) VarDiff is broken.
+* (N) VarDiff only waits 1/2 of `retargetTime` when miners first enter the pool in order to establish an initial stats set.
 
 * (N) If the code looks like it has 9 styles of writing, that because it does. It was a long journey from NOMP to here with
 many hands in the jar and no "standard" of style. Over time, the base has become the spaghetti that NOMP was written to
