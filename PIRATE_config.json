@@ -2,12 +2,12 @@
     "coin": "PIRATE.json",
     "printShares": false,
     "printHighShares": true,
-    "printNethash": false,
+    "printNethash": true,
     "minDiffAdjust": true,
-    "printVarDiffAdjust": true,
+    "printVarDiffAdjust": false,
     "printCurrentDiff": true,
     "printSubmissions": true,
-    "jobRebroadcastTimeout": 50,
+    "jobRebroadcastTimeout": 56,
     "connectionTimeout": 6000000,
     "emitInvalidBlockHashes": false,
     "address": "RESWsMfWFvPGGUPGfGgXPgGKWeqVaAtUfy",
@@ -20,11 +20,11 @@
             "diff": 1500
         },
         "5334": {
-            "diff": 100000,
+            "diff": 30000,
             "varDiff": {
-                "minDiff": 30000,
-                "maxDiff": 1000000,
-                "targetTime": 20,
+                "minDiff": 3000,
+                "maxDiff": 10000000,
+                "targetTime": 5,
                 "retargetTime": 300,
                 "variancePercent": 30
             }

@@ -1,10 +1,10 @@
 {
     "coin": "VPRM.json",
-    "printShares": false,
+    "printShares": true,
     "printHighShares": true,
-    "printNethash": false,
+    "printNethash": true,
     "minDiffAdjust": true,
-    "printVarDiffAdjust": false,
+    "printVarDiffAdjust": true,
     "printCurrentDiff": true,
     "printSubmissions": true,
     "jobRebroadcastTimeout": 50,
