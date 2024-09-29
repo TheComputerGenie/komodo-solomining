@@ -2,7 +2,7 @@ const fs = require('fs');
 const os = require('os');
 const cluster = require('cluster');
 
-const Website = require('./lib/workers/website.js');
+const Website = require('./lib/workers/websiteListener.js');
 const logging = require('./lib/modules/logging.js');
 const PoolWorker = require('./lib/workers/poolWorker.js');
 const CliListener = require('./lib/workers/cliListener.js');
