@@ -1,6 +1,7 @@
 {
   "name": "komodo-solomining",
   "version": "0.1.0",
+  "type": "commonjs",
   "description": "High performance Stratum poolserver in Node.js",
   "keywords": [
     "stratum",
@@ -61,7 +62,9 @@
     "node": ">=21.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --no-deprecation init.js \"$1\""
+    "preinstall": "npm config set fund false --location=global",
+    "postinstall": "npm dedupe && npm update",
+    "startinstall": "npm install --save-prod --save-bundle --no-optional --omit=optional && node init.js \"$1\"",
+    "start": "node --trace-deprecation init.js \"$1\""
   }
 }
