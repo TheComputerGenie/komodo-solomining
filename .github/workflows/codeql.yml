@@ -71,8 +71,8 @@ jobs:
     - if: matrix.build-mode == 'manual'
       shell: bash
       run: |
-        cd scripts && ./build.sh
-        exit 1
+        cd scripts
+        gcc blocknotify.c -o blocknotify
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
